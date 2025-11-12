@@ -1,0 +1,418 @@
+# 📘 Library Borrowing Records Management System (User Interactive)
+
+class Library:
+    def __init__(self):
+        self.records = {}
+        self.book_borrow_count = {}
+
+    def add_member(self):
+        name = input("Enter member name: ")
+        count = int(input("Enter number of books borrowed: "))
+        self.records[name] = count
+
+    def add_book(self):
+        book = input("Enter book name: ")
+        count = int(input("Enter borrow count for this book: "))
+        self.book_borrow_count[book] = count
+
+    def average_books_borrowed(self):
+        if not self.records:
+            print("No members found.")
+            return
+        avg = sum(self.records.values()) / len(self.records)
+        print("Average number of books borrowed:", avg)
+
+    def highest_lowest_borrowed_book(self):
+        if not self.book_borrow_count:
+            print("No books found.")
+            return
+        highest = max(self.book_borrow_count, key=self.book_borrow_count.get)
+        lowest = min(self.book_borrow_count, key=self.book_borrow_count.get)
+        print(f"Most borrowed book: {highest}")
+        print(f"Least borrowed book: {lowest}")
+
+    def members_with_zero_borrow(self):
+        zero_members = [m for m, c in self.records.items() if c == 0]
+        print("Members who borrowed 0 books:", zero_members)
+
+    def most_frequently_borrowed_book(self):
+        if not self.book_borrow_count:
+            print("No books found.")
+            return
+        mode = max(self.book_borrow_count, key=self.book_borrow_count.get)
+        print("Most frequently borrowed book:", mode)
+
+
+def menu():
+    lib = Library()
+    while True:
+        print("\n--- Library Menu ---")
+        print("1. Add Member")
+        print("2. Add Book Record")
+        print("3. Compute Average")
+        print("4. Highest & Lowest Borrowed Book")
+        print("5. Members with Zero Borrow")
+        print("6. Most Frequently Borrowed Book")
+        print("7. Exit")
+        ch = input("Enter choice: ")
+
+        if ch == '1': lib.add_member()
+        elif ch == '2': lib.add_book()
+        elif ch == '3': lib.average_books_borrowed()
+        elif ch == '4': lib.highest_lowest_borrowed_book()
+        elif ch == '5': lib.members_with_zero_borrow()
+        elif ch == '6': lib.most_frequently_borrowed_book()
+        elif ch == '7': break
+        else: print("Invalid choice!")
+
+menu()
+
+# --- Test the program ---
+lib = Library()
+lib.add_record("Sneha", 5)
+lib.add_record("Rahul", 2)
+lib.add_record("Priya", 0)
+lib.add_record("Amit", 3)
+
+lib.add_book_borrow("Python Basics", 10)
+lib.add_book_borrow("C Programming", 5)
+lib.add_book_borrow("Data Science", 12)
+lib.add_book_borrow("AI Intro", 3)
+
+
+
+
+
+
+2.# 🛒 E-Commerce System Search (Linear and Binary Search)
+
+def linear_search(ids, target):
+    for i in ids:
+        if i == target:
+            return True
+    return False
+
+def binary_search(ids, target):
+    low, high = 0, len(ids) - 1
+    while low <= high:
+        mid = (low + high) // 2
+        if ids[mid] == target:
+            return True
+        elif ids[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return False
+ids = [101, 105, 108, 110, 115, 120]
+target = 110
+
+
+
+def menu():
+    ids = list(map(int, input("Enter sorted Customer IDs (space-separated): ").split()))
+    target = int(input("Enter ID to search: "))
+    print("\n1. Linear Search\n2. Binary Search")
+    ch = input("Enter choice: ")
+    if ch == '1':
+        print("Result:", "Found" if linear_search(ids, target) else "Not Found")
+    elif ch == '2':
+        print("Result:", "Found" if binary_search(ids, target) else "Not Found")
+    else:
+        print("Invalid choice!")
+
+menu()
+
+3.
+# 📝 TextEditor Undo/Redo Using Stack
+
+class TextEditor:
+    def __init__(self):
+        self.undo_stack = []
+        self.redo_stack = []
+        self.text = ""
+
+    def make_change(self, new_text=None):
+        # Allow both user input (menu) and direct input (testing)
+        if new_text is None:
+            new_text = input("Enter new text: ")
+
+        self.undo_stack.append(self.text)
+        self.text = new_text
+        self.redo_stack.clear()
+
+    def undo(self):
+        if self.undo_stack:
+            self.redo_stack.append(self.text)
+            self.text = self.undo_stack.pop()
+        else:
+            print("Nothing to undo!")
+
+    def redo(self):
+        if self.redo_stack:
+            self.undo_stack.append(self.text)
+            self.text = self.redo_stack.pop()
+        else:
+            print("Nothing to redo!")
+
+    def show(self):
+        print("Current Document:", self.text)
+
+
+# --- Test Section ---
+editor = TextEditor()
+editor.make_change("Hello")
+editor.make_change("Hello World")
+editor.make_change("Hello World!!!")
+editor.undo()
+editor.show()
+editor.redo()
+editor.show()
+
+
+# --- Menu Section ---
+def menu():
+    editor = TextEditor()
+    while True:
+        print("\n--- Text Editor Menu ---")
+        print("1. Make Change")
+        print("2. Undo")
+        print("3. Redo")
+        print("4. Show Document")
+        print("5. Exit")
+        ch = input("Enter choice: ")
+
+        if ch == '1':
+            editor.make_change()
+        elif ch == '2':
+            editor.undo()
+        elif ch == '3':
+            editor.redo()
+        elif ch == '4':
+            editor.show()
+        elif ch == '5':
+            break
+        else:
+            print("Invalid choice!")
+
+menu()
+
+
+
+
+
+
+
+4# ⚙️ Real-time Event Processing System using Queue
+
+from collections import deque
+
+class EventQueue:
+    def __init__(self):
+        self.queue = deque()
+
+    def add_event(self, event=None):
+        if event is None:
+            event = input("Enter event name: ")
+        self.queue.append(event)
+        print(f"Event added: {event}")
+
+    def process_event(self):
+        if self.queue:
+            print("Processed Event:", self.queue.popleft())
+        else:
+            print("No events to process!")
+
+    def display_events(self):
+        print("Pending Events:", list(self.queue))
+
+    def cancel_event(self, event=None):
+        if event is None:
+            event = input("Enter event to cancel: ")
+        if event in self.queue:
+            self.queue.remove(event)
+            print(f"Cancelled Event: {event}")
+        else:
+            print("Event not found!")
+
+
+# --- Test Section ---
+q = EventQueue()
+q.add_event("User Login")
+q.add_event("File Upload")
+q.add_event("Payment Done")
+q.display_events()
+q.process_event()
+q.cancel_event("File Upload")
+q.display_events()
+
+
+# --- Interactive Menu ---
+def menu():
+    q = EventQueue()
+    while True:
+        print("\n--- Event Queue Menu ---")
+        print("1. Add Event")
+        print("2. Process Event")
+        print("3. Display Events")
+        print("4. Cancel Event")
+        print("5. Exit")
+        ch = input("Enter choice: ")
+
+        if ch == '1':
+            q.add_event()
+        elif ch == '2':
+            q.process_event()
+        elif ch == '3':
+            q.display_events()
+        elif ch == '4':
+            q.cancel_event()
+        elif ch == '5':
+            break
+        else:
+            print("Invalid choice!")
+
+menu()
+
+
+5.# 🎓 Student Record Management System using Linked List
+
+class Node:
+    def __init__(self, roll, name, marks):
+        self.roll = roll
+        self.name = name
+        self.marks = marks
+        self.next = None
+
+class StudentList:
+    def __init__(self):
+        self.head = None
+
+    def add_student(self, roll=None, name=None, marks=None):
+        if roll is None:
+            roll = int(input("Enter Roll No: "))
+            name = input("Enter Name: ")
+            marks = float(input("Enter Marks: "))
+        new_node = Node(roll, name, marks)
+        if not self.head:
+            self.head = new_node
+        else:
+            temp = self.head
+            while temp.next:
+                temp = temp.next
+            temp.next = new_node
+        print("Student added successfully!")
+
+    def delete_student(self, roll=None):
+        if roll is None:
+            roll = int(input("Enter Roll No to delete: "))
+        temp = self.head
+        if temp and temp.roll == roll:
+            self.head = temp.next
+            print("Deleted successfully!")
+            return
+        prev = None
+        while temp and temp.roll != roll:
+            prev = temp
+            temp = temp.next
+        if temp:
+            prev.next = temp.next
+            print("Deleted successfully!")
+        else:
+            print("Student not found!")
+
+    def update_student(self, roll=None):
+        if roll is None:
+            roll = int(input("Enter Roll No to update: "))
+        temp = self.head
+        while temp:
+            if temp.roll == roll:
+                temp.name = input("Enter new Name: ")
+                temp.marks = float(input("Enter new Marks: "))
+                print("Updated successfully!")
+                return
+            temp = temp.next
+        print("Student not found!")
+
+    def search_student(self, roll=None):
+        if roll is None:
+            roll = int(input("Enter Roll No to search: "))
+        temp = self.head
+        while temp:
+            if temp.roll == roll:
+                print(f"Found → Roll: {temp.roll}, Name: {temp.name}, Marks: {temp.marks}")
+                return
+            temp = temp.next
+        print("Student not found!")
+
+    def sort_by_marks(self):
+        arr = []
+        temp = self.head
+        while temp:
+            arr.append((temp.roll, temp.name, temp.marks))
+            temp = temp.next
+        arr.sort(key=lambda x: x[2])
+        print("Students sorted by marks:")
+        for rec in arr:
+            print(f"Roll: {rec[0]}, Name: {rec[1]}, Marks: {rec[2]}")
+
+    def display(self):
+        temp = self.head
+        if not temp:
+            print("No records found.")
+            return
+        print("Student Records:")
+        while temp:
+            print(f"Roll: {temp.roll}, Name: {temp.name}, Marks: {temp.marks}")
+            temp = temp.next
+
+
+# --- Test Section ---
+s = StudentList()
+s.add_student(1, "Sneha", 85)
+s.add_student(2, "Rahul", 92)
+s.add_student(3, "Priya", 78)
+
+print("\nAll Students:")
+s.display()
+
+print("\nAfter Sorting by Marks:")
+s.sort_by_marks()
+
+print("\nSearch Result:")
+s.search_student(2)
+
+
+# --- Menu Section ---
+def menu():
+    s = StudentList()
+    while True:
+        print("\n--- Student Record Menu ---")
+        print("1. Add Student")
+        print("2. Delete Student")
+        print("3. Update Student")
+        print("4. Search Student")
+        print("5. Sort by Marks")
+        print("6. Display All")
+        print("7. Exit")
+        ch = input("Enter choice: ")
+
+        if ch == '1':
+            s.add_student()
+        elif ch == '2':
+            s.delete_student()
+        elif ch == '3':
+            s.update_student()
+        elif ch == '4':
+            s.search_student()
+        elif ch == '5':
+            s.sort_by_marks()
+        elif ch == '6':
+            s.display()
+        elif ch == '7':
+            break
+        else:
+            print("Invalid choice!")
+
+menu()
+
+
